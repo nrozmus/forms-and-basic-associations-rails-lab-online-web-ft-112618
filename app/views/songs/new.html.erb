@@ -1,39 +1,18 @@
-class Song < ActiveRecord::Base
-  # add associations here
-  belongs_to :artist
-  belongs_to :genre
-  has_many :notes
+<h1>Create a Song</h1>
 
-  def genre_name=(name)
-    self.genre = Genre.find_or_create_by(name:name)
-  end
+<%= form_for @song  do |f| %>
+  <%= f.label :title %>
+  <%= f.text_field :title %>
+  <%= f.label :artist_name %>
+  <%= f.text_field :artist_name %>
+  <%= f.label :genre_id %>
+  <%= f.collection_select :genre_id, Genre.all, :id, :name %>
 
-  def genre_name
-    self.genre ? self.genre.name : nil
-  end
+  <input name='song[note_contents][]' id='song_notes_1'>
+  <input name='song[note_contents][]' id='song_notes_2'>
 
-  def artist_name=(name)
-    self.artist = Artist.find_or_create_by(name: name)
-  end
 
-  def artist_name
-    self.artist ? self.artist.name : nil
-  end
+  <br />
 
-  def note_contents
-    self.notes.map do |note|
-      note.content
-    end
-  end
-
-  def note_contents=(contents_array)
-
-    contents_array.each do |content_element|
-      if content_element.strip != ''
-        @note = Note.create(content: content_element)
-        self.notes << @note
-      end
-    end
-  end
-
-end #end of class
+  <%= f.submit %>
+<% end %>
